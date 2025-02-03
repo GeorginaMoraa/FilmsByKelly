@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Films</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, red, black);
+            color: white;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: 15px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav a {
+            margin: 0 20px;
+            text-decoration: none;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #ff4d4d;
+        }
+
+        .content {
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            margin: 0 auto;
+            max-width: 1200px;
+        }
+
+        .card {
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .card-content {
+            padding: 15px;
+            text-align: left;
+        }
+
+        .card-content h3 {
+            margin: 0 0 10px;
+            font-size: 1.5rem;
+            color: #ff4d4d;
+        }
+
+        .card-content p {
+            margin: 0 0 15px;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .button {
+            display: inline-block;
+            background-color: rgba(255, 0, 0, 0.8);
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .button:hover {
+            background-color: #ff4d4d;
+            transform: scale(1.05);
+        }
+
+        footer {
+            margin-top: 50px;
+            padding: 15px 0;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #ff4d4d;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="about.html">About the Filmmaker</a>
+        <a href="shop.html">Shop</a>
+        <a href="artwork.html">Artwork</a>
+        <a href="checkout.html">Cart</a>
+        <a href="contacts.html">Contacts</a>
+    </nav>
+
+    <div class="content">
+        <h2>~Film Gallery~</h2>
+        <div class="grid">
+            <div class="card">
+                <img src="images/alex-litvin-MAYsdoYpGuk-unsplash.jpg" alt="Film 1">
+                <div class="card-content">
+                    <h3>CHEKI MOVIES.COM</h3>
+                    <p>Discover a world of movies at your fingertips, where every story comes to life with stunning visuals.</p>
+                    <a href="images/FINAL ADVERT.mp4" class="button">Watch Now</a>
+                </div>
+            </div>
+            <div class="card">
+                <img src="images/ammar-sabaa-peK29r4MLDs-unsplash.jpg" alt="Film 2">
+                <div class="card-content">
+                    <h3>CLONE</h3>
+                    <p>~I can make you appear in two places at the same time~</p>
+                    <a href="images/Clone.mp4" class="button">Watch Now</a>
+                </div>
+            </div>
+            <div class="card">
+                <img src="images/jakob-owens-CiUR8zISX60-unsplash.jpg" alt="Film 3">
+                <div class="card-content">
+                    <h3>MUSIC MAESTRO</h3>
+                    <p>A gripping music video that keeps you on the edge of your seat. Shows how much music runs through my veins...</p>
+                    <a href="images/MVI_7641.mp4" class="button">Watch Now</a>
+                </div>
+            </div>
+            <div class="card">
+                <img src="film4.jpg" alt="Film 4">
+                <div class="card-content">
+                    <h3>Film 4</h3>
+                    <p>An inspiring documentary that showcases the beauty of the natural world.</p>
+                    <a href="film4.mp4" class="button">Watch Now</a>
+                </div>
+            </div>
+            <div class="card">
+                <img src="film5.jpg" alt="Film 5">
+                <div class="card-content">
+                    <h3>Film 5</h3>
+                    <p>A sci-fi adventure that takes you beyond the limits of imagination.</p>
+                    <a href="film5.mp4" class="button">Watch Now</a>
+                </div>
+            </div>
+            <div class="card">
+                <img src="film6.jpg" alt="Film 6">
+                <div class="card-content">
+                    <h3>Film 6</h3>
+                    <p>A heartfelt drama that tells a story of love, sacrifice, and redemption.</p>
+                    <a href="film6.mp4" class="button">Watch Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Kelvin Mutua. All rights reserved. | <a href="#privacy">Privacy Policy</a></p>
+    </footer>
+</body>
+</html>

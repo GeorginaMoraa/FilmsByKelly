@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M-Pesa Payment</title>
+</head>
+<body>
+    <h2>Make Payment</h2>
+    <input type="text" id="phone" placeholder="Enter Phone Number">
+    <input type="number" id="amount" placeholder="Enter Amount">
+    <button onclick="makePayment()">Pay Now</button>
+
+    <script>
+        async function makePayment() {
+            const phone = document.getElementById("phone").value;
+            const amount = document.getElementById("amount").value;
+
+            const response = await fetch("/api/mpesa/stkpush", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ phone, amount })
+            });
+
+            const data = await response.json();
+            alert("Payment Initiated: " + JSON.stringify(data));
+        }
+    </script>
+</body>
+</html>

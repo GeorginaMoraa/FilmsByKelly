@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        h2, h3 {
+            text-align: center;
+            color: #ff0000;
+        }
+        section {
+            max-width: 800px;
+            margin: 40px auto;
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            text-align: left;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #000;
+            color: #fff;
+        }
+        .total {
+            font-weight: bold;
+            text-align: right;
+            padding-top: 10px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        input, textarea, select, button {
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #ff0000;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #cc0000;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            color: #ff0000;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <section id="checkout">
+        <h2>Checkout</h2>
+        
+        <h3>Order Summary</h3>
+        <table id="order-summary">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <div class="total">
+            <p>Total: KES <span id="total-cost">0.00</span></p>
+        </div>
+
+        <h3>Customer Information</h3>
+        <form id="checkout-form">
+            <label for="name">Full Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+        
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" name="phone" placeholder="+254712345678" required>
+
+            <label for="address">Shipping Address:</label>
+            <textarea id="address" name="address" rows="4" required></textarea>
+
+            <label for="payment-method">Payment Method:</label>
+            <select id="payment-method" name="payment-method" required>
+                <option value="" disabled selected>Select a payment method</option>
+                <option value="credit-card">Credit Card</option>
+                <option value="paypal">PayPal</option>
+                <option value="mpesa">M-Pesa</option>
+            </select>
+
+            <button type="submit" id="submit-btn">Place Order</button>
+            <p class="loading" id="loading-message">Processing payment... Please wait.</p>
+        </form>
+    </section>
+
+    <script>
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let totalCost = 0;
+
+        function renderOrderSummary() {
+            const tbody = document.querySelector('#order-summary tbody');
+            tbody.innerHTML = ''; 
+            totalCost = 0;
+
+            cart.forEach(item => {
+                const subtotal = item.price * item.quantity;
+                totalCost += subtotal;
+
+                const row = `
+                    <tr>
+                        <td>${item.name}</td>
+                        <td>KES ${item.price.toFixed(2)}</td>
+                        <td>${item.quantity}</td>
+                        <td>KES ${subtotal.toFixed(2)}</td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+
+            document.getElementById('total-cost').textContent = totalCost.toFixed(2);
+        }
+
+        document.getElementById('checkout-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const customerDetails = Object.fromEntries(formData.entries());
+
+            if (customerDetails['payment-method'] === 'mpesa') {
+                makeMpesaPayment(customerDetails);
+            } else {
+                alert(`Thank you for your order, ${customerDetails.name}!`);
+                localStorage.removeItem('cart');
+                window.location.href = 'index.html'; 
+            }
+        });
+
+        async function makeMpesaPayment(customerDetails) {
+            const phone = customerDetails['phone'];
+            const amount = totalCost;
+            const submitBtn = document.getElementById('submit-btn');
+            const loadingMessage = document.getElementById('loading-message');
+
+            submitBtn.disabled = true; 
+            loadingMessage.style.display = 'block';
+
+            try {
+                const response = await fetch('http://localhost:3000/stkpush', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phone, amount })
+                });
+
+                const result = await response.json();
+                submitBtn.disabled = false;
+                loadingMessage.style.display = 'none';
+
+                if (response.ok) {
+                    alert("M-Pesa payment request sent! Please check your phone.");
+                    localStorage.removeItem('cart');
+                    window.location.href = 'index.html'; 
+                } else {
+                    alert(`Error: ${result.error}`);
+                }
+            } catch (error) {
+                submitBtn.disabled = false;
+                loadingMessage.style.display = 'none';
+                alert("Failed to initiate payment. Try again.");
+            }
+        }
+
+        renderOrderSummary();
+    </script>
+
+</body>
+</html>

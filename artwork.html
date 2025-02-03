@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artwork</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, red, black);
+            color: white;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: 15px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav a {
+            margin: 0 20px;
+            text-decoration: none;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #ff4d4d;
+        }
+
+        .content {
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            margin: 0 auto;
+            max-width: 1200px;
+        }
+
+        .card {
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .card-content {
+            padding: 15px;
+            text-align: left;
+        }
+
+        .card-content h3 {
+            margin: 0 0 10px;
+            font-size: 1.5rem;
+            color: #ff4d4d;
+        }
+
+        .card-content p {
+            margin: 0;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        footer {
+            margin-top: 50px;
+            padding: 15px 0;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #ff4d4d;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="about.html">About the Filmmaker</a>
+        <a href="shop.html">Shop</a>
+        <a href="films.html">Films</a>
+        <a href="cart.html">Cart</a>
+        <a href="contacts.html">Contacts</a>
+    </nav>
+
+    <div class="content">
+        <h2>Artwork</h2>
+        <div class="grid">
+            <div class="card"><img src="images/IMG-20250131-WA0007.jpg" alt="Art 1"><div class="card-content"><h3>Exhibit A</h3><p>A stunning masterpiece showcasing bold colors and intricate details.</p></div></div>
+            <div class="card"><img src="images/IMG-20250131-WA0008.jpg" alt="Art 2"><div class="card-content"><h3>Exhibit B</h3><p>An abstract creation that evokes deep emotions and imagination.</p></div></div>
+            <div class="card"><img src="images/IMG-20250131-WA0009.jpg" alt="Art 3"><div class="card-content"><h3>Exhibit C</h3><p>A vibrant expression of culture and creativity.</p></div></div>
+            <div class="card"><img src="images/IMG-20250131-WA0010.jpg" alt="Art 4"><div class="card-content"><h3>Exhibit D</h3><p>A thought-provoking composition with deep symbolism.</p></div></div>
+            <div class="card"><img src="images/WhatsApp Image 2025-01-31 at 11.26.21_709688f7.jpg" alt="Art 5"><div class="card-content"><h3>Exhibit E</h3><p>A breathtaking landscape that captures the beauty of nature.</p></div></div>
+            <div class="card"><img src="images/WhatsApp Image 2025-01-31 at 11.26.21_66952628.jpg" alt="Art 6"><div class="card-content"><h3>Exhibit F</h3><p>A mesmerizing digital artwork with futuristic elements.</p></div></div>
+            <div class="card"><img src="images/WhatsApp Image 2025-01-31 at 11.34.52_98e73f63.jpg" alt="Art 7"><div class="card-content"><h3>Exhibit G</h3><p>A minimalistic yet powerful piece that speaks volumes.</p></div></div>
+            <div class="card"><img src="images/WhatsApp Image 2025-01-31 at 11.34.52_cda863b8.jpg" alt="Art 8"><div class="card-content"><h3>Exhibit H</h3><p>An energetic splash of colors that radiates positivity.</p></div></div>
+            <div class="card"><img src="images/WhatsApp Image 2025-01-31 at 11.34.53_e2a45970.jpg" alt="Art 9"><div class="card-content"><h3>Exhibit I</h3><p>A surrealistic dreamscape that invites endless interpretations.</p></div></div>
+            <div class="card"><img src="images/IMG-20250203-WA0034.jpg" alt="Art 10"><div class="card-content"><h3>Exhibit J</h3><p>A surrealistic dreamscape that invites endless interpretations.</p></div></div>
+            <div class="card"><img src="images/IMG-20250203-WA0035.jpg" alt="Art 11"><div class="card-content"><h3>Exhibit K</h3><p>A surrealistic dreamscape that invites endless interpretations.</p></div></div>
+            <div class="card"><img src="images/IMG-20250203-WA0038.jpg" alt="Art 12"><div class="card-content"><h3>Exhibit L</h3><p>A surrealistic dreamscape that invites endless interpretations.</p></div></div>
+            <div class="card"><img src="images/IMG-20250203-WA0041.jpg" alt="Art 13"><div class="card-content"><h3>Exhibit M</h3><p>A surrealistic dreamscape that invites endless interpretations.</p></div></div>
+            <div class="card"><img src="images/IMG-20250203-WA0037.jpg" alt="Art 14"><div class="card-content"><h3>Exhibit N</h3><p>A surrealistic dreamscape that invites endless interpretations.</p></div></div>
+            <div class="card"><img src="images/IMG-20250203-WA0046.jpg" alt="Art 15"><div class="card-content"><h3>Exhibit O</h3><p>A surrealistic dreamscape that invites endless interpretations.</p></div></div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Kelvin Mutua. All rights reserved. | <a href="#privacy">Privacy Policy</a></p>
+    </footer>
+</body>
+</html>
