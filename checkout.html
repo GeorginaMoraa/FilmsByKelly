@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://vercel.live; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://vercel.live">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -176,7 +177,7 @@
             loadingMessage.style.display = 'block';
 
             try {
-                const response = await fetch('http://localhost:3000/stkpush', {
+                const response = await fetch('http://localhost:5000/stkpush', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ phone, amount })
