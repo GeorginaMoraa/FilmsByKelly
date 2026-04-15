@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout — Films By Kelly</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --red: #e8000d;
+      --red-dim: #a50009;
+      --black: #0a0a0a;
+      --dark: #111111;
+      --card-bg: #191919;
+      --border: rgba(255,255,255,0.07);
+      --text: #f0f0f0;
+      --muted: #888;
+      --nav-height: 64px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--black);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-height);
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      z-index: 1000;
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      color: var(--red);
+      letter-spacing: 2px;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex; gap: 2rem; list-style: none;
+    }
+
+    .nav-links a {
+      color: #bbb; text-decoration: none;
+      font-size: 0.9rem; font-weight: 500;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: #fff; }
+
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 4px; background: none; border: none;
+    }
+
+    .hamburger span { display: block; width: 24px; height: 2px; background: #fff; transition: all 0.3s; }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none; position: fixed;
+      top: var(--nav-height); left: 0; right: 0;
+      background: rgba(10,10,10,0.97);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 5%; flex-direction: column; gap: 1.2rem; z-index: 999;
+    }
+
+    .mobile-menu.open { display: flex; }
+
+    .mobile-menu a {
+      color: #bbb; text-decoration: none;
+      font-size: 1.1rem; font-weight: 500;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      padding: 0.5rem 0; border-bottom: 1px solid var(--border);
+      transition: color 0.2s;
+    }
+
+    .mobile-menu a:hover { color: var(--red); }
+
+    /* ── CHECKOUT LAYOUT ── */
+    .checkout-wrapper {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: calc(var(--nav-height) + 3rem) 5% 4rem;
+    }
+
+    .page-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 0.5rem;
+    }
+
+    .page-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      letter-spacing: 0.03em;
+      margin-bottom: 2.5rem;
+    }
+
+    /* Order summary */
+    .summary-card {
+      background: var(--dark);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    .summary-card h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: 0.08em;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      text-align: left;
+      padding: 0.8rem 1.5rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 0.9rem 1.5rem;
+      font-size: 0.95rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    .empty-cart-msg {
+      padding: 2rem 1.5rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .total-row span:first-child {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+    }
+
+    .total-row .total-amount {
+      font-size: 1.3rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    /* Form */
+    .form-card {
+      background: var(--dark);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-card h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: 0.08em;
+      margin-bottom: 1.5rem;
+      color: var(--muted);
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 12px 14px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--red);
+    }
+
+    input::placeholder, textarea::placeholder {
+      color: var(--muted);
+    }
+
+    select option {
+      background: var(--card-bg);
+      color: var(--text);
+    }
+
+    textarea { resize: vertical; min-height: 90px; }
+
+    /* M-Pesa hint */
+    .mpesa-hint {
+      display: none;
+      margin-top: 0.7rem;
+      padding: 0.8rem 1rem;
+      background: rgba(232,0,13,0.08);
+      border: 1px solid rgba(232,0,13,0.2);
+      border-radius: 4px;
+      font-size: 0.85rem;
+      color: #ccc;
+      line-height: 1.5;
+    }
+
+    .mpesa-hint.visible { display: block; }
+
+    /* Submit button */
+    .submit-btn {
+      width: 100%;
+      background: var(--red);
+      color: #fff;
+      border: none;
+      padding: 15px;
+      border-radius: 4px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .submit-btn:hover:not(:disabled) { background: var(--red-dim); transform: translateY(-1px); }
+    .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .loading-msg {
+      display: none;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-top: 1rem;
+    }
+
+    .loading-msg.visible { display: block; }
+
+    /* Spinner */
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .spinner {
+      display: inline-block;
+      width: 14px; height: 14px;
+      border: 2px solid var(--border);
+      border-top-color: var(--red);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    footer {
+      background: var(--dark);
+      border-top: 1px solid var(--border);
+      padding: 2rem 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    footer p { font-size: 0.85rem; color: var(--muted); }
+    footer a { color: var(--red); text-decoration: none; }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      footer { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-logo">Films By Kelly</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="films.html">Films</a></li>
+      <li><a href="artwork.html">Artwork</a></li>
+      <li><a href="shop.html">Shop</a></li>
+      <li><a href="contacts.html">Contact</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="films.html">Films</a>
+    <a href="artwork.html">Artwork</a>
+    <a href="shop.html">Shop</a>
+    <a href="cart.html">Cart</a>
+    <a href="contacts.html">Contact</a>
+  </div>
+
+  <!-- CHECKOUT CONTENT -->
+  <div class="checkout-wrapper">
+    <p class="page-label">Almost there</p>
+    <h1 class="page-title">Checkout</h1>
+
+    <!-- Order Summary -->
+    <div class="summary-card">
+      <h2>Order Summary</h2>
+      <div id="order-table-wrap">
+        <p class="empty-cart-msg">Your cart is empty. <a href="shop.html" style="color:var(--red);">Go to shop →</a></p>
+      </div>
+      <div class="total-row">
+        <span>Total</span>
+        <span class="total-amount">KES <span id="total-cost">0.00</span></span>
+      </div>
+    </div>
+
+    <!-- Customer Info -->
+    <div class="form-card">
+      <h2>Customer Information</h2>
+      <div id="checkout-form">
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" placeholder="Kelvin Mutua" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" placeholder="you@example.com" required>
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone Number (M-Pesa)</label>
+          <input type="tel" id="phone" placeholder="0712345678 or +254712345678" required>
+        </div>
+        <div class="form-group">
+          <label for="address">Shipping Address</label>
+          <textarea id="address" placeholder="Your delivery address in Nairobi..." required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="payment-method">Payment Method</label>
+          <select id="payment-method" required onchange="handlePaymentChange(this.value)">
+            <option value="" disabled selected>Select payment method</option>
+            <option value="mpesa">M-Pesa (STK Push)</option>
+            <option value="cash">Cash on Delivery</option>
+          </select>
+          <div class="mpesa-hint" id="mpesa-hint">
+            📱 An M-Pesa STK Push will be sent to your phone. Enter your PIN when prompted to complete the payment.
+          </div>
+        </div>
+
+        <button class="submit-btn" id="submit-btn" onclick="handleSubmit()">
+          Place Order
+        </button>
+        <p class="loading-msg" id="loading-msg">
+          <span class="spinner"></span> Processing M-Pesa payment… Check your phone for the prompt.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Kelvin Mutua · Films By Kelly. All rights reserved.</p>
+    <p><a href="contacts.html">Get in touch</a></p>
+  </footer>
+
+  <script>
+    // ── Load cart ──
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    let totalCost = 0;
+
+    function renderOrderSummary() {
+      if (cart.length === 0) return;
+
+      const wrap = document.getElementById('order-table-wrap');
+      let rows = '';
+      totalCost = 0;
+
+      cart.forEach(item => {
+        const subtotal = item.price * item.quantity;
+        totalCost += subtotal;
+        rows += `
+          <tr>
+            <td>${item.name}</td>
+            <td>KES ${item.price.toLocaleString()}</td>
+            <td>${item.quantity}</td>
+            <td>KES ${subtotal.toLocaleString()}</td>
+          </tr>
+        `;
+      });
+
+      wrap.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Price</th>
+              <th>Qty</th>
+              <th>Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+
+      document.getElementById('total-cost').textContent = totalCost.toLocaleString() + '.00';
+    }
+
+    function handlePaymentChange(value) {
+      const hint = document.getElementById('mpesa-hint');
+      hint.classList.toggle('visible', value === 'mpesa');
+    }
+
+    async function handleSubmit() {
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const address = document.getElementById('address').value.trim();
+      const paymentMethod = document.getElementById('payment-method').value;
+
+      if (!name || !email || !phone || !address || !paymentMethod) {
+        alert('Please fill in all fields.');
+        return;
+      }
+
+      if (cart.length === 0) {
+        alert('Your cart is empty.');
+        return;
+      }
+
+      if (paymentMethod === 'mpesa') {
+        await inititateMpesaPayment(phone);
+      } else {
+        alert(`Thank you, ${name}! Your order has been placed. We'll contact you for delivery.`);
+        localStorage.removeItem('cart');
+        window.location.href = 'index.html';
+      }
+    }
+
+    async function inititateMpesaPayment(phone) {
+      const submitBtn = document.getElementById('submit-btn');
+      const loadingMsg = document.getElementById('loading-msg');
+
+      submitBtn.disabled = true;
+      loadingMsg.classList.add('visible');
+
+      try {
+        // ✅ Points to Netlify serverless function — works in production
+        const response = await fetch('/.netlify/functions/stkpush', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone, amount: totalCost }),
+        });
+
+        const result = await response.json();
+
+        submitBtn.disabled = false;
+        loadingMsg.classList.remove('visible');
+
+        if (response.ok) {
+          alert('✅ M-Pesa prompt sent! Enter your PIN on your phone to complete payment.');
+          localStorage.removeItem('cart');
+          window.location.href = 'index.html';
+        } else {
+          alert(`Payment error: ${result.error || 'Something went wrong. Please try again.'}`);
+        }
+      } catch (error) {
+        submitBtn.disabled = false;
+        loadingMsg.classList.remove('visible');
+        alert('Could not reach payment server. Please check your connection and try again.');
+        console.error('M-Pesa error:', error);
+      }
+    }
+
+    // ── Init ──
+    renderOrderSummary();
+
+    // Hamburger
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+    });
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+      });
+    });
+  </script>
+</body>
+</html>

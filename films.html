@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>films</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+    :root {
+      --red: #e8000d;
+      --red-dim: #a50009;
+      --black: #0a0a0a;
+      --dark: #111111;
+      --card-bg: #191919;
+      --border: rgba(255,255,255,0.07);
+      --text: #f0f0f0;
+      --muted: #888;
+      --nav-height: 64px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--black);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-height);
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      z-index: 1000;
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      color: var(--red);
+      letter-spacing: 2px;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex; gap: 2rem; list-style: none;
+    }
+
+    .nav-links a {
+      color: #bbb; text-decoration: none;
+      font-size: 0.9rem; font-weight: 500;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: #fff; }
+
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 4px; background: none; border: none;
+    }
+
+    .hamburger span { display: block; width: 24px; height: 2px; background: #fff; transition: all 0.3s; }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none; position: fixed;
+      top: var(--nav-height); left: 0; right: 0;
+      background: rgba(10,10,10,0.97);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 5%; flex-direction: column; gap: 1.2rem; z-index: 999;
+    }
+
+    .mobile-menu.open { display: flex; }
+
+    .mobile-menu a {
+      color: #bbb; text-decoration: none;
+      font-size: 1.1rem; font-weight: 500;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      padding: 0.5rem 0; border-bottom: 1px solid var(--border);
+      transition: color 0.2s;
+    }
+
+    .mobile-menu a:hover { color: var(--red); }
+
+    /* ── CHECKOUT LAYOUT ── */
+    .checkout-wrapper {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: calc(var(--nav-height) + 3rem) 5% 4rem;
+    }
+
+    .page-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 0.5rem;
+    }
+
+    .page-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      letter-spacing: 0.03em;
+      margin-bottom: 2.5rem;
+    }
+
+    /* Order summary */
+    .summary-card {
+      background: var(--dark);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    .summary-card h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: 0.08em;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      text-align: left;
+      padding: 0.8rem 1.5rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 0.9rem 1.5rem;
+      font-size: 0.95rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    .empty-cart-msg {
+      padding: 2rem 1.5rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .total-row span:first-child {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+    }
+
+    .total-row .total-amount {
+      font-size: 1.3rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    /* Form */
+    .form-card {
+      background: var(--dark);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-card h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: 0.08em;
+      margin-bottom: 1.5rem;
+      color: var(--muted);
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 12px 14px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--red);
+    }
+
+    input::placeholder, textarea::placeholder {
+      color: var(--muted);
+    }
+
+    select option {
+      background: var(--card-bg);
+      color: var(--text);
+    }
+
+    textarea { resize: vertical; min-height: 90px; }
+
+    /* M-Pesa hint */
+    .mpesa-hint {
+      display: none;
+      margin-top: 0.7rem;
+      padding: 0.8rem 1rem;
+      background: rgba(232,0,13,0.08);
+      border: 1px solid rgba(232,0,13,0.2);
+      border-radius: 4px;
+      font-size: 0.85rem;
+      color: #ccc;
+      line-height: 1.5;
+    }
+
+    .mpesa-hint.visible { display: block; }
+
+    /* Submit button */
+    .submit-btn {
+      width: 100%;
+      background: var(--red);
+      color: #fff;
+      border: none;
+      padding: 15px;
+      border-radius: 4px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .submit-btn:hover:not(:disabled) { background: var(--red-dim); transform: translateY(-1px); }
+    .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .loading-msg {
+      display: none;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-top: 1rem;
+    }
+
+    .loading-msg.visible { display: block; }
+
+    /* Spinner */
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .spinner {
+      display: inline-block;
+      width: 14px; height: 14px;
+      border: 2px solid var(--border);
+      border-top-color: var(--red);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    footer {
+      background: var(--dark);
+      border-top: 1px solid var(--border);
+      padding: 2rem 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    footer p { font-size: 0.85rem; color: var(--muted); }
+    footer a { color: var(--red); text-decoration: none; }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      footer { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+   <nav>
+    <a href="index.html" class="nav-logo">Films By Kelly</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="films.html">Films</a></li>
+      <li><a href="artwork.html">Artwork</a></li>
+      <li><a href="shop.html">Shop</a></li>
+      <li><a href="contacts.html">Contact</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+   <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="films.html">Films</a>
+    <a href="artwork.html">Artwork</a>
+    <a href="shop.html">Shop</a>
+    <a href="cart.html">Cart</a>
+    <a href="contacts.html">Contact</a>
+  </div>
+
+
+    <div class="content">
+        <h2>~Film Gallery~</h2>
+        <div class="grid">
+            <div class="card">
+                <img src="images/alex-litvin-MAYsdoYpGuk-unsplash.jpg" alt="Film 1">
+                <div class="card-content">
+                    <h3>CHEKI MOVIES.COM</h3>
+                    <p>Discover a world of movies at your fingertips, where every story comes to life with stunning visuals.</p>
+                    <a href="images/FINAL ADVERT.mp4" class="button">Watch Now</a>
+                </div>
+            </div>
+            <div class="card">
+                <img src="images/ammar-sabaa-peK29r4MLDs-unsplash.jpg" alt="Film 2">
+                <div class="card-content">
+                    <h3>CLONE</h3>
+                    <p>~I can make you appear in two places at the same time~</p>
+                    <a href="images/Clone.mp4" class="button">Watch Now</a>
+                </div>
+            </div>
+            <div class="card">
+                <img src="images/jakob-owens-CiUR8zISX60-unsplash.jpg" alt="Film 3">
+                <div class="card-content">
+                    <h3>MUSIC MAESTRO</h3>
+                    <p>A gripping music video that keeps you on the edge of your seat. Shows how much music runs through my veins...</p>
+                    <a href="images/MVI_7641.mp4" class="button">Watch Now</a>
+                </div>
+            </div>
+            <div class="card">
+                <img src="film4.jpg" alt="Film 4">
+                <div class="card-content">
+                    <h3>Film 4</h3>
+                    <p>An inspiring documentary that showcases the beauty of the natural world.</p>
+                    <a href="film4.mp4" class="button">Watch Now</a>
+                </div>
+            </div>
+            <div class="card">
+                <img src="film5.jpg" alt="Film 5">
+                <div class="card-content">
+                    <h3>Film 5</h3>
+                    <p>A sci-fi adventure that takes you beyond the limits of imagination.</p>
+                    <a href="film5.mp4" class="button">Watch Now</a>
+                </div>
+            </div>
+            <div class="card">
+                <img src="film6.jpg" alt="Film 6">
+                <div class="card-content">
+                    <h3>Film 6</h3>
+                    <p>A heartfelt drama that tells a story of love, sacrifice, and redemption.</p>
+                    <a href="film6.mp4" class="button">Watch Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Kelvin Mutua. All rights reserved. | <a href="#privacy">Privacy Policy</a></p>
+    </footer>
+</body>
+</html>
